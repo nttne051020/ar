@@ -36,8 +36,8 @@
       <a-entity mindar-image-target="targetIndex: 0">
         <a-video
           src="#video1"
-          width="3"
-          height="1.6875"
+          width="1"
+          height="0.5625" <!-- 16:9 tỉ lệ gốc -->
           position="0 0 0"
           rotation="0 0 0"
         ></a-video>
@@ -48,7 +48,7 @@
       window.addEventListener("DOMContentLoaded", () => {
         const video = document.querySelector("#video1");
 
-        // Chờ video sẵn sàng rồi mới play
+        // Đảm bảo phát video sau khi đã tải
         video.addEventListener("loadeddata", () => {
           const promise = video.play();
           if (promise !== undefined) {
