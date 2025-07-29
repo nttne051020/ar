@@ -1,8 +1,13 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+      video { display: none; }
+    </style>
   </head>
   <body>
     <a-scene
@@ -11,35 +16,23 @@
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
+      embedded
     >
       <a-assets>
-        <video id="video1" src="video.mp4" autoplay loop playsinline crossorigin="anonymous"></video>
+        <video id="video1" src="video.mp4" autoplay loop muted playsinline crossorigin="anonymous"></video>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-video
-          src="#video1"
+        <a-video 
+          src="#video1" 
+          width="1" 
+          height="0.5625" 
           position="0 0 0"
-          width="1"
-          height="0.5625"
-          rotation="0 0 0"
-        ></a-video>
+          rotation="0 0 0">
+        </a-video>
       </a-entity>
     </a-scene>
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const video = document.querySelector("#video1");
-    const clickToPlay = () => {
-      video.play().catch((e) => {
-        console.log("Video play error:", e);
-      });
-      document.removeEventListener("click", clickToPlay);
-    };
-    document.addEventListener("click", clickToPlay);
-  });
-</script>
-
   </body>
 </html>
