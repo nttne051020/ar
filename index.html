@@ -48,13 +48,15 @@
     >
       <a-assets>
         <video
-          id="video1"
-          src="video.mp4"
-          preload="auto"
-          crossorigin="anonymous"
-          webkit-playsinline
-          playsinline
-        ></video>
+     id="video1"
+     src="video.mp4"
+     preload="auto"
+     crossorigin="anonymous"
+     webkit-playsinline
+     playsinline
+     muted
+     loop
+     ></video>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -81,5 +83,25 @@
         });
       });
     </script>
+    <script>
+  const video = document.querySelector("#video1");
+
+  // Tải trước video
+  video.load();
+
+  // Khi có thể phát, phát tự động
+  video.addEventListener("canplaythrough", () => {
+    video.play().catch(() => {
+      // Một số trình duyệt yêu cầu chạm để phát nếu chưa có tương tác
+    });
+  });
+
+  // Tự phát lại khi kết thúc (nếu bạn không dùng loop)
+  video.addEventListener("ended", () => {
+    video.currentTime = 0;
+    video.play();
+  });
+</script>
+
   </body>
 </html>
