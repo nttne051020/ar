@@ -33,10 +33,14 @@
         cursor: pointer;
         z-index: 10;
       }
+      
     </style>
   </head>
   <body>
     <button id="startButton">chạm vào màn hình để bắt đầu</button>
+<button id="unmuteButton" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+  🔊 Bật tiếng
+</button>
 
     <a-scene
       mindar-image="imageTargetSrc: marker.mind;"
@@ -54,7 +58,6 @@
      crossorigin="anonymous"
      webkit-playsinline
      playsinline
-     muted
      loop
      ></video>
       </a-assets>
@@ -100,6 +103,27 @@
   video.addEventListener("ended", () => {
     video.currentTime = 0;
     video.play();
+  });
+</script>
+<script>
+  const video = document.querySelector("#video1");
+  const unmuteBtn = document.querySelector("#unmuteButton");
+
+  // Tải sẵn video
+  video.load();
+
+  // Khi có thể phát, phát thử (nếu được)
+  video.addEventListener("canplaythrough", () => {
+    video.play().catch(() => {
+      // Trình duyệt chưa cho phép phát
+    });
+  });
+
+  // Khi ấn nút bật tiếng
+  unmuteBtn.addEventListener("click", () => {
+    video.muted = false;
+    video.play();
+    unmuteBtn.style.display = "none"; // Ẩn nút sau khi bật
   });
 </script>
 
