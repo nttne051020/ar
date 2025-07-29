@@ -28,5 +28,18 @@
         ></a-video>
       </a-entity>
     </a-scene>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const video = document.querySelector("#video1");
+    const clickToPlay = () => {
+      video.play().catch((e) => {
+        console.log("Video play error:", e);
+      });
+      document.removeEventListener("click", clickToPlay);
+    };
+    document.addEventListener("click", clickToPlay);
+  });
+</script>
+
   </body>
 </html>
