@@ -1,131 +1,159 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AR Video with Sound</title>
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
-      }
-      a-scene {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-      #startButton {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 24px;
-        padding: 16px 32px;
-        background-color: #ffffffdd;
-        border: 2px solid #000;
-        border-radius: 10px;
-        cursor: pointer;
-        z-index: 10;
-      }
-      
-    </style>
-  </head>
-  <body>
-    <button id="startButton">chạm vào màn hình để bắt đầu</button>
-<button id="unmuteButton" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
-  🔊 Bật tiếng
-</button>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AR Video</title>
 
-    <a-scene
-      mindar-image="imageTargetSrc: marker.mind;"
-      color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
-      embedded
-    >
-      <a-assets>
-        <video
-     id="video1"
-     src="video.mp4"
-     preload="auto"
-     crossorigin="anonymous"
-     webkit-playsinline
-     playsinline
-     loop
-     ></video>
-      </a-assets>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+<style>
+html,body{
+margin:0;
+padding:0;
+height:100%;
+overflow:hidden;
+}
 
-      <a-entity mindar-image-target="targetIndex: 0">
-        <a-video
-          src="#video1"
-          width="3"
-          height="1.6875"
-          position="0 0 0"
-        ></a-video>
-      </a-entity>
-    </a-scene>
+a-scene{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
 
-    <script>
-      const video = document.querySelector("#video1");
-      const button = document.querySelector("#startButton");
+#startButton{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:22px;
+padding:14px 28px;
+background:#ffffffdd;
+border-radius:10px;
+border:none;
+z-index:10;
+}
 
-      button.addEventListener("click", () => {
-        video.play().then(() => {
-          button.style.display = "none";
-        }).catch((err) => {
-          console.error("Không thể phát video:", err);
-        });
-      });
-    </script>
-    <script>
-  const video = document.querySelector("#video1");
+#unmuteButton{
+position:absolute;
+top:20px;
+left:20px;
+padding:10px 16px;
+font-size:16px;
+border:none;
+border-radius:8px;
+background:#ffffffdd;
+z-index:10;
+}
+</style>
+</head>
 
-  // Tải trước video
-  video.load();
+<body>
 
-  // Khi có thể phát, phát tự động
-  video.addEventListener("canplaythrough", () => {
-    video.play().catch(() => {
-      // Một số trình duyệt yêu cầu chạm để phát nếu chưa có tương tác
-    });
-  });
+<button id="startButton">Chạm để bắt đầu</button>
+<button id="unmuteButton">🔊 Bật tiếng</button>
 
-  // Tự phát lại khi kết thúc (nếu bạn không dùng loop)
-  video.addEventListener("ended", () => {
-    video.currentTime = 0;
-    video.play();
-  });
-</script>
+<a-scene
+mindar-image="imageTargetSrc: marker.mind;"
+color-space="sRGB"
+renderer="colorManagement:true"
+vr-mode-ui="enabled:false"
+device-orientation-permission-ui="enabled:false"
+embedded
+>
+
+<a-assets>
+
+<video
+id="video1"
+src="video1.mp4"
+preload="auto"
+crossorigin="anonymous"
+webkit-playsinline
+playsinline
+loop
+muted
+></video>
+
+</a-assets>
+
+<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+<a-entity id="target" mindar-image-target="targetIndex:0">
+
+<a-video
+id="videoPlane"
+src="#video1"
+width="1.3"
+position="0 0 0.01"
+></a-video>
+
+</a-entity>
+
+</a-scene>
+
 <script>
-  const video = document.querySelector("#video1");
-  const unmuteBtn = document.querySelector("#unmuteButton");
 
-  // Tải sẵn video
-  video.load();
+const video = document.querySelector("#video1");
+const startButton = document.querySelector("#startButton");
+const unmuteBtn = document.querySelector("#unmuteButton");
+const target = document.querySelector("#target");
 
-  // Khi có thể phát, phát thử (nếu được)
-  video.addEventListener("canplaythrough", () => {
-    video.play().catch(() => {
-      // Trình duyệt chưa cho phép phát
-    });
-  });
+/* bấm để bắt đầu AR */
 
-  // Khi ấn nút bật tiếng
-  unmuteBtn.addEventListener("click", () => {
-    video.muted = false;
-    video.play();
-    unmuteBtn.style.display = "none"; // Ẩn nút sau khi bật
-  });
+startButton.addEventListener("click",()=>{
+
+video.play().then(()=>{
+
+video.pause();
+startButton.style.display="none";
+
+});
+
+});
+
+/* khi quét thấy marker */
+
+target.addEventListener("targetFound",()=>{
+
+video.currentTime = 0;
+video.play();
+
+});
+
+/* khi mất marker */
+
+target.addEventListener("targetLost",()=>{
+
+video.pause();
+
+});
+
+/* bật tiếng */
+
+unmuteBtn.addEventListener("click",()=>{
+
+video.muted = false;
+video.play();
+unmuteBtn.style.display="none";
+
+});
+  const videoPlane = document.querySelector("#videoPlane");
+
+/* giữ đúng tỷ lệ video */
+
+video.addEventListener("loadedmetadata", () => {
+
+const ratio = video.videoHeight / video.videoWidth;
+
+videoPlane.setAttribute("height", 1.3 * ratio);
+
+});
+
 </script>
 
-  </body>
+</body>
 </html>
